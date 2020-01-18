@@ -7,7 +7,7 @@ infura_url = "wss://kovan.infura.io/ws/v3/73150865c6e943d59cf17560170dbb85"
 
 web3 = Web3(Web3.WebsocketProvider(infura_url))
 
-with open("contract_abi.json") as f:
+with open('contract_abi.json') as f:
     info_json = json.load(f)
 
 abi = info_json
@@ -36,12 +36,12 @@ while True:
    for event in myfilter.get_new_entries():
         #my_callback(event)
         event_dict = toDict(event)
-        event_dict = json.dumps(event_dict,indent=4)
+        
         print(event_dict)
         print(event_dict[0])
         print(event_dict[1])
-        #print (event_dict["args"])
-        #print (event_dict["args"][0]['sensorName'])
+        print (event_dict["args"])
+        print (event_dict["args"][0]['sensorName'])
 
    time.sleep(2)
 
