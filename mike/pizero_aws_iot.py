@@ -138,7 +138,7 @@ while True:
     else:
         pass
     
-    #json object built for gps over bluetooth
+    #json object built for gps over bluetooth, to hardcode gps comment out below and set coordinates variable above
     gps_stream = bluetooth_serial.readline()
     gps_stream_decoded = gps_stream.decode('ascii')
     

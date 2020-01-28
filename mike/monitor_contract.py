@@ -2,17 +2,18 @@ from web3 import Web3
 import json
 import os
 import time
+import subprocess
 
 infura_url = "wss://kovan.infura.io/ws/v3/73150865c6e943d59cf17560170dbb85"
 
 web3 = Web3(Web3.WebsocketProvider(infura_url))
 
-with open("contract_abi.json") as f:
+with open("Lassie.json") as f:
     info_json = json.load(f)
 
 abi = info_json
 
-mycontract = web3.eth.contract(address='0x091FDeb7990D3E00d13c31b81841d56b33164AD7', abi=abi)
+mycontract = web3.eth.contract(address='0xE917f5348ce9B6483ffdFb0D4F15bC029bed96c1', abi=abi)
 
 def my_callback(event):
     print (f'{event} fired from contract')
@@ -30,18 +31,17 @@ def toDict(dictToParse):
             parsedDict[key] = val.hex()
     return parsedDict
 
-myfilter = mycontract.events.currentResponderState.createFilter(fromBlock=16147303)
+myfilter = mycontract.events.publishWSContractState.createFilter(fromBlock=16207300)
 
 while True:
    for event in myfilter.get_new_entries():
-        #my_callback(event)
         event_dict = toDict(event)
-        event_dict = json.dumps(event_dict,indent=4)
         print(event_dict)
-        print(event_dict[0])
-        print(event_dict[1])
-        #print (event_dict["args"])
-        #print (event_dict["args"][0]['sensorName'])
+        if event_dict['args']['responderState']>2:
+            #this launches the drone - there are two options, outdoor with gps or indoor demo. LEASH DRONE INDOORS!
+            #subprocess.call(f"python gps_deploy_asset.py --latitude 30.1288942 --longitude -95.5063823",shell=True)
+            subprocess.call(f"python indoor_deploy_asset.py",shell=True)
+
 
    time.sleep(2)
 
